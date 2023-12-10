@@ -1,25 +1,21 @@
-FROM erlang:alpine
+FROM bitwalker/alpine-erlang:20
 
-LABEL maintaner="Alexander Komlev <aleksandr.komlev@gmail.com>"
+LABEL maintaner="Ilia Ivanin <poison@rjhost.ru>"
 
 ENV SSH_PROXY_ROOT=/opt/ssh-proxy
-ENV SSH_PROXY_DATA=/opt/data
-ENV SSH_PROXY_HOST_KEY=$SSH_PROXY_DATA/server/ssh_host_rsa_key
 
 RUN mkdir -p \
-        $SSH_PROXY_ROOT \
-        $SSH_PROXY_DATA/auth \
-        $SSH_PROXY_DATA/users \
-        $SSH_PROXY_DATA/server
+        $SSH_PROXY_ROOT/bin \
+        $SSH_PROXY_ROOT/auth \
+        $SSH_PROXY_ROOT/users \
+        $SSH_PROXY_ROOT/server
 
-ADD ssh-proxy.erl $SSH_PROXY_ROOT/
+ADD ssh-proxy.erl $SSH_PROXY_ROOT/bin
+ADD ssh_host_rsa_key $SSH_PROXY_ROOT/server/ssh_host_rsa_key
+ADD id_rsa.pub /opt/ssh-proxy/auth/id_rsa.pub
+ADD id_rsa /opt/ssh-proxy/auth/id_rsa
+ADD user /opt/ssh-proxy/users/user
 
-RUN apk add --no-cache --virtual deps \
-    openssl && \
-    openssl genrsa -out $SSH_PROXY_HOST_KEY && \
-    apk del deps
+EXPOSE 2202
 
-ENTRYPOINT [ \
-    "/bin/sh", "-c", \
-    "$SSH_PROXY_ROOT/ssh-proxy.erl -i $SSH_PROXY_DATA/auth -u $SSH_PROXY_DATA/users -t $SSH_PROXY_DATA/server" \
-]
+ENTRYPOINT ["/bin/sh", "-c", "$SSH_PROXY_ROOT/bin/ssh-proxy.erl -i $SSH_PROXY_ROOT/auth -u $SSH_PROXY_ROOT/users -t $SSH_PROXY_ROOT/server -p 2202"] 
