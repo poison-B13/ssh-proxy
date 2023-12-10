@@ -59,7 +59,7 @@ Alternatively, you can use [Erlang escript](http://erlang.org/doc/man/escript.ht
 
 ```bash
 docker run -d --rm --name ssh-proxy \
-    -p ${CONFIG_SSH_PORT}:2022 \
+    -p ${CONFIG_SSH_PORT}:2202 \
     -v ${CONFIG_SSH_AUTH}:/opt/data/auth \
     -v ${CONFIG_SSH_USERS}:/opt/data/users \
     poison-B13/ssh-proxy
@@ -98,7 +98,7 @@ Your team needs to update `~/.ssh/config` file with details of ssh proxy
 ```
 Host ssh-proxy
    HostName 127.0.0.1
-   Port 2022
+   Port 2202
    User my-user-name
    IdentityFile ~/.ssh/my-public-key
 ```
@@ -146,7 +146,7 @@ Use the following command to run the proxy locally for RnD purposes
 
 ```bash
 escript ssh-proxy.erl \
-   -p 2022 \
+   -p 2202 \
    -i /tmp/ssh/auth \
    -u /tmp/ssh/users \
    -t /tmp/ssh/server
