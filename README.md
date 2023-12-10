@@ -54,14 +54,15 @@ Use the proxy to control access of your engineering team to cloud servers with s
 
 ### Running the proxy
 
-The easiest way to run Secure Shell proxy is Docker containers, there are available pre-build images at `flussonic/ssh-proxy`. Alternatively, you can use [Erlang escript](http://erlang.org/doc/man/escript.html) to spawn a daemon but it requires an installation of [Erlang OTP/19 or later release](http://www.erlang.org).
+The easiest way to run Secure Shell proxy is Docker containers, there are available pre-build images at `flussonic/ssh-proxy`. 
+Alternatively, you can use [Erlang escript](http://erlang.org/doc/man/escript.html) to spawn a daemon but it requires an installation of [Erlang OTP/19 or later release](http://www.erlang.org).
 
 ```bash
-docker run -it --rm --name ssh-proxy \
+docker run -d --rm --name ssh-proxy \
     -p ${CONFIG_SSH_PORT}:2022 \
     -v ${CONFIG_SSH_AUTH}:/opt/data/auth \
     -v ${CONFIG_SSH_USERS}:/opt/data/users \
-    flussonic/ssh-proxy
+    poison-B13/ssh-proxy
 ```
 
 Use environment variables or other means to configure the proxy container
@@ -76,6 +77,9 @@ export CONFIG_SSH_AUTH=/tmp/ssh/auth
 ## location of user's publick key. Only these user will be able to build a tunnel
 export CONFIG_SSH_USERS=/tmp/ssh/users
 ```
+
+### Generate a server RSA key 
+openssl genrsa -out ssh_host_rsa_key
 
 ### Configure a private key
 
