@@ -1,0 +1,12 @@
+version: '3.5'
+services:
+  ssh-proxy:
+    build: .
+    container_name: ssh_proxy
+    volumes:
+      - '/opt/ssh-proxy/users:/opt/ssh-proxy/users'
+      - '/opt/ssh-proxy/auth:/opt/ssh-proxy/auth'
+      - '/opt/ssh-proxy/server:/opt/ssh-proxy/server'
+    ports:
+      - '2202:2202'
+    restart: unless-stopped
